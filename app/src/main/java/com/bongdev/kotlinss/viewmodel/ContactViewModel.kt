@@ -19,6 +19,8 @@ class ContactViewModel(private val repository: ContactRepository) : ViewModel(),
     val inputName = MutableLiveData<String?>()
     @Bindable
     val inputEmail = MutableLiveData<String?>()
+    @Bindable
+    val inputPhone = MutableLiveData<String?>()
 
     @Bindable
     val saveOrUpdateButtonText = MutableLiveData<String?>()
@@ -40,6 +42,7 @@ class ContactViewModel(private val repository: ContactRepository) : ViewModel(),
       // reseating the fields
       inputName.value = null
       inputEmail.value = null
+       inputPhone.value = null
       isUpdatedOrDeleted = false
       saveOrUpdateButtonText.value = "Save"
       clearButtonText.value = "Clear"
@@ -51,11 +54,37 @@ class ContactViewModel(private val repository: ContactRepository) : ViewModel(),
        // reseating the fields
        inputName.value = null
        inputEmail.value = null
+       inputPhone.value = null
        isUpdatedOrDeleted = false
        saveOrUpdateButtonText.value = "Save"
        clearButtonText.value = "Clear"
    }
 
+    fun saveOrUpdate(){
+        if(isUpdatedOrDeleted){
+            update(Contacts(0,inputName.value!!,inputPhone.value!!, inputEmail.value!!))
+        }else{
+            insert(Contacts(0,inputName.value!!,inputPhone.value!!, inputEmail.value!!))
+        }
+    }
+
+    fun initUpdateAndDelete(contact: Contacts){
+        inputName.value = contact.name
+        inputPhone.value = contact.phone
+        inputEmail.value = contact.email
+        isUpdatedOrDeleted = true
+        contactToUpdateOrDelete = contact
+        saveOrUpdateButtonText.value = "Update"
+        clearButtonText.value = "Cancel"
+    }
+
+    override fun addOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+
+    }
+
+    override fun removeOnPropertyChangedCallback(callback: Observable.OnPropertyChangedCallback?) {
+
+    }
 
 
 }
